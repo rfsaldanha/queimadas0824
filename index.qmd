@@ -39,11 +39,9 @@ queimadas <- st_read("data/queimadas.gpkg", quiet = TRUE) |>
 Em Outubro de 2024, um grande número de focos de queimadas surgiu no Brasil e em outros países da América do Sul, criando grandes nuvens de fumaça na atmosfera, o que poderá ter potenciais impactos na saúde da população.
 
 :::
-A imagem ao lado, feita pelo satélite GOES-16 no dia 26 de agosto de 2024 às 14h40min da tarde (horário de Brasília), mostra a extensão das nuvens de fumaça ocupando partes das regiões Norte, Centro-Oeste e Sudeste. As nuvens de fumaça na imagem se diferenciam das nuvens por terem um aspecto mais cinzento, enquanto as nuvens são mais brancas e flocadas.
+Esta imagem, feita pelo satélite GOES-16 no dia 26 de agosto de 2024 às 14h40min da tarde (horário de Brasília), mostra a extensão das nuvens de fumaça ocupando partes das regiões Norte, Centro-Oeste e Sudeste. <br><br> As nuvens de fumaça na imagem se diferenciam das nuvens por terem um aspecto mais cinzento, enquanto as nuvens são mais brancas e flocadas.
 
-<br>
-
-Iremos apresentar aqui alguns dados e estatísticas para caracterizar esta ocorrência de queimadas generalizada e seus possíveis impactos na saúde humana.
+Apresentamos aqui alguns dados e estatísticas para caracterizar esta ocorrência de queimadas generalizada e seus possíveis impactos na saúde humana.
 
 :::{#cr-main-plot}
 
@@ -183,7 +181,11 @@ leaflet() |>
 :::{.cr-section}
 
 :::{focus-on="cr-rib-preto"}
-A foto ao lado foi feita em Ribeirão Preto, SP (fonte: CNN Brasil). 
+A foto ao lado foi feita em Ribeirão Preto, SP ([CNN Brasil](https://www.cnnbrasil.com.br/nacional/incendio-de-grandes-proporcoes-atinge-canavial-e-nuvem-de-fumaca-engole-ribeirao-preto-sp/)) e mostra a grande extensão que uma nuvem de fumaça proveniente de queimadas pode tomar sob um núcleo urbano. 
+:::
+
+:::{focus-on="cr-rib-preto"}
+A grande quantidade de **gás carbônico** e de **material particulado** nestas nuvens de fumaça pode apresentar graves consequências para a saúde humana, agravando condições de **doenças respiratórias** e **cardiovasculares**, podendo acarretar um aumento na busca por **atendimento ambulatorial** e no número de **internações hospitalares**.
 :::
 
 :::{#cr-rib-preto .scale-to-fill}
