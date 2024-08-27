@@ -30,23 +30,23 @@ queimadas <- st_read("data/queimadas.gpkg", quiet = TRUE) |>
 
 :::{.cr-section}
 
-:::{focus-on="cr-main-plot"}
+:::{#cr-goes}
+![](img/goes_202408061940.jpg)
+:::
+
+:::{focus-on="cr-goes"}
 
 ![](img/selo_obs.png){width="25%"}
 
 # Queimadas
 
 Em Outubro de 2024, um grande número de focos de queimadas surgiu no Brasil e em outros países da América do Sul, criando grandes nuvens de fumaça na atmosfera, o que poderá ter potenciais impactos na saúde da população.
-
 :::
+
+:::{focus-on="cr-goes"}
 Esta imagem, feita pelo satélite GOES-16 no dia 26 de agosto de 2024 às 14h40min da tarde (horário de Brasília), mostra a extensão das nuvens de fumaça ocupando partes das regiões Norte, Centro-Oeste e Sudeste. <br><br> As nuvens de fumaça na imagem se diferenciam das nuvens por terem um aspecto mais cinzento, enquanto as nuvens são mais brancas e flocadas.
 
 Apresentamos aqui alguns dados e estatísticas para caracterizar esta ocorrência de queimadas generalizada e seus possíveis impactos na saúde humana.
-
-:::{#cr-main-plot}
-
-![](img/goes_202408061940.jpg)
-
 :::
 
 :::
@@ -108,7 +108,7 @@ Os mapas abaixo apresentam focos de queimada detectados em dois momentos. O mapa
 queimadas |>
   filter(date(data_hora_gmt) == as.Date("2024-08-01")) |>
   leaflet() |>
-  addProviderTiles("CartoDB.DarkMatter") |>
+  addProviderTiles("CartoDB.Voyager") |>
   addCircleMarkers(
     radius = 2,
     color = "red",
@@ -119,7 +119,7 @@ queimadas |>
 queimadas |>
   filter(date(data_hora_gmt) == as.Date("2024-08-26")) |>
   leaflet() |>
-  addProviderTiles("CartoDB.DarkMatter") |>
+  addProviderTiles("CartoDB.Voyager") |>
   addCircleMarkers(
     radius = 2,
     color = "red",
@@ -130,6 +130,53 @@ queimadas |>
 
 
 Pode-se observar, comparando os dois mapas, o crescimento de focos de queimada no Brasil -- principalmente na região Norte -- e no Paraguai, Argentina e norte da Bolívia.
+
+Na imagem de satélite abaixo, nota-se que boa parte dos focos se localizam em fronteiras agrícolas, às margens de florestas.
+
+```{r}
+#| column: screen
+
+mapbiomas <- "http://production.alerta.mapbiomas.org/geoserver/mapbiomas-alertas/wms"
+
+queimadas |>
+  filter(date(data_hora_gmt) == as.Date("2024-08-26")) |>
+  leaflet() |>
+  addProviderTiles("Esri.WorldImagery") |>
+  setView(lng = -61.95, lat = -10.88, zoom = 6) |>
+  addCircleMarkers(
+    radius = 2,
+    color = "red",
+    stroke = FALSE,
+    fillOpacity = 0.5
+  )
+```
+
+<br>
+A localização dos focos de queimada pode ser cruzada com o Cadastro Ambiental Rural (CAR), facilitando a investigação da ocorrência da queimadas. O mapa abaixo apresenta este cruzamento, usando dados do CAR com apoio do [MapBiomas](https://brasil.mapbiomas.org/). As linhas amarelas representam os limites de propriedades rurais cadastradas no CAR.
+
+
+```{r}
+#| column: screen
+
+mapbiomas <- "http://production.alerta.mapbiomas.org/geoserver/mapbiomas-alertas/wms"
+
+queimadas |>
+  filter(date(data_hora_gmt) == as.Date("2024-08-26")) |>
+  leaflet() |>
+  addProviderTiles("Esri.WorldImagery") |>
+  setView(lng = -56.51, lat = -14.77, zoom = 12) |>
+  addWMSTiles(
+    mapbiomas,
+    layers = "mv_rural_properties",
+    options = WMSTileOptions(format = "image/png", transparent = TRUE)
+  ) |>
+  addCircleMarkers(
+    radius = 4,
+    color = "red",
+    stroke = FALSE,
+    fillOpacity = 0.5
+  )
+```
 
 # Fumaça na atmosfera
 
@@ -193,6 +240,9 @@ A grande quantidade de **gás carbônico** e de **material particulado** nestas 
 :::
 
 :::
+
+
+
 
 # Referências
 
