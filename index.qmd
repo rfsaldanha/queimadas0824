@@ -1,7 +1,10 @@
 ---
 title: "Queimadas"
-format: closeread-html
-remove-header-space: true
+format:
+  closeread-html:
+    remove-header-space: true
+    debug-mode: false
+    embed-resources: true
 ---
 
 ```{r}
