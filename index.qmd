@@ -1,0 +1,198 @@
+---
+title: "Queimadas"
+format: closeread-html
+remove-header-space: true
+---
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+# Packages
+library(tidyverse)
+library(sf)
+library(leaflet)
+library(terra)
+library(viridisLite)
+library(htmlwidgets)
+library(htmltools)
+
+# Load data
+
+## Queimadas
+queimadas <- st_read("data/queimadas.gpkg", quiet = TRUE) |>
+  st_set_crs(4326)
+```
+
+:::{.cr-section}
+
+:::{focus-on="cr-main-plot"}
+
+![](img/selo_obs.png){width="25%"}
+
+# Queimadas
+
+Em Outubro de 2024, um grande número de focos de queimadas surgiu no Brasil e em outros países da América do Sul, criando grandes nuvens de fumaça na atmosfera, o que poderá ter potenciais impactos na saúde da população.
+
+:::
+A imagem ao lado, feita pelo satélite GOES-16 no dia 26 de agosto de 2024 às 14h40min da tarde (horário de Brasília), mostra a extensão das nuvens de fumaça ocupando partes das regiões Norte, Centro-Oeste e Sudeste. As nuvens de fumaça na imagem se diferenciam das nuvens por terem um aspecto mais cinzento, enquanto as nuvens são mais brancas e flocadas.
+
+<br>
+
+Iremos apresentar aqui alguns dados e estatísticas para caracterizar esta ocorrência de queimadas generalizada e seus possíveis impactos na saúde humana.
+
+:::{#cr-main-plot}
+
+![](img/goes_202408061940.jpg)
+
+:::
+
+:::
+
+# Dias sem chuva
+
+Um importante fator para a ocorrência de queimadas é a quantidade de dias sem chuva. Conforme a vegetação fica mais seca, pequenos focos de queimada são facilmente espalhados pelo vento e se multiplicam rapidamente no território.
+
+O mapa abaixo apresenta uma estimativa da quantidade média de dias sem chuva calculada pelo Inpe, no dia 20 de agosto de 2024, caracterizada na imagem por clores mais claras.
+
+```{r}
+#| column: screen
+
+r <- rast("data/dias_sem_chuva_inpe/INPE_FireRiskModel_2.2_NDWR_20240820.nc")
+pal <- colorNumeric(mako(256), values(r), na.color = "transparent")
+
+leaflet() |>
+  addProviderTiles("CartoDB.Voyager") |>
+  setView(lng = -55, lat = -10, zoom = 3) |>
+  addRasterImage(r, colors = pal, opacity = 0.7) |>
+    addLegend(pal = pal, values = values(r),
+    title = "Dias sem chuva", position = "bottomright")
+```
+
+<br> 
+Pode-se observar grandes porções do território brasileiro com mais de 60 dias sem chuva, como nas regiões Norte, Centro-Oeste e Sudeste.
+
+# Evolução dos focos de queimadas
+
+Deste o dia 1o de agosto de 2024, os países da América do Sul e o Brasil tem apresentado uma quantidade crescente de focos de queimada, conforme dados levantados pelo Inpe. O gráfico abaixo apresenta a quantidade de focos detectadas através do satélite AQUA-Tarde, usado pelo Inpe como referêcia para este tipo de detecçào.
+
+
+```{r}
+queimadas |>
+  mutate(date = as_date(data_hora_gmt)) |>
+  ggplot(aes(x = date, fill = pais)) +
+  geom_bar() +
+  theme_minimal() +
+  labs(x = "Data", y = "Focos de queimada", fill = "País")
+```
+
+O gráfico abaixo apresenta a quantidade de focos de queimadas no Brasil por bioma afetado. Pode-se notar que o bioma amazônico é o mais afetado em todos os dias de agosto de 2024.
+
+```{r}
+queimadas |>
+  filter(pais == "Brasil") |>
+  mutate(date = as_date(data_hora_gmt)) |>
+  ggplot(aes(x = date, fill = bioma)) +
+  geom_bar() +
+  theme_minimal() +
+  labs(x = "Data", y = "Focos de queimada", fill = "Bioma")
+```
+
+Os mapas abaixo apresentam focos de queimada detectados em dois momentos. O mapa da esquerda apresenta os focos no dia 1o de agosto. O mapa da direita apresenta os focos no dia 26 de agosto de 2024.
+
+```{r}
+#| column: screen-inset-shaded
+#| layout-nrow: 1
+queimadas |>
+  filter(date(data_hora_gmt) == as.Date("2024-08-01")) |>
+  leaflet() |>
+  addProviderTiles("CartoDB.DarkMatter") |>
+  addCircleMarkers(
+    radius = 2,
+    color = "red",
+    stroke = FALSE,
+    fillOpacity = 0.5
+  )
+
+queimadas |>
+  filter(date(data_hora_gmt) == as.Date("2024-08-26")) |>
+  leaflet() |>
+  addProviderTiles("CartoDB.DarkMatter") |>
+  addCircleMarkers(
+    radius = 2,
+    color = "red",
+    stroke = FALSE,
+    fillOpacity = 0.5
+  )
+```
+
+
+Pode-se observar, comparando os dois mapas, o crescimento de focos de queimada no Brasil -- principalmente na região Norte -- e no Paraguai, Argentina e norte da Bolívia.
+
+# Fumaça na atmosfera
+
+Estes focos de queimadas produziram grande volumes de fumaça na atmosfera que são carregados pelos ventos. Os mapas abaixo apresentam a quantidade de fumaça detectada pelo Inpe nos dias 23, 24 e 25 de agosto de 2024, respectivamente da esquerda para a direita.
+
+```{r}
+#| column: screen-inset-shaded
+#| layout-nrow: 1
+r_1 <- rast("data/fumaca_inpe/media_diaria_aod469_20240823.tiff")
+pal_1 <- colorNumeric(inferno(256), values(r_1), na.color = "transparent")
+
+r_2 <- rast("data/fumaca_inpe/media_diaria_aod469_20240824.tiff")
+pal_2 <- colorNumeric(inferno(256), values(r_2), na.color = "transparent")
+
+r_3 <- rast("data/fumaca_inpe/media_diaria_aod469_20240825.tiff")
+pal_3 <- colorNumeric(inferno(256), values(r_3), na.color = "transparent")
+
+leaflet() |>
+  addProviderTiles("CartoDB.Voyager") |>
+  setView(lng = -55, lat = -10, zoom = 4) |>
+  addRasterImage(r_1, colors = pal_1, opacity = 0.7)
+
+leaflet() |>
+  addProviderTiles("CartoDB.Voyager") |>
+  setView(lng = -55, lat = -10, zoom = 4) |>
+  addRasterImage(r_2, colors = pal_2, opacity = 0.7)
+
+leaflet() |>
+  addProviderTiles("CartoDB.Voyager") |>
+  setView(lng = -55, lat = -10, zoom = 4) |>
+  addRasterImage(r_3, colors = pal_3, opacity = 0.7)
+```
+
+Ribeirão Preto (SP) foi uma das cidades afetadas, conforme pode ser observado abaixo nos dados de 25 de agosto de 2024.
+
+```{r}
+#| column: screen
+
+r <- rast("data/fumaca_inpe/media_diaria_aod469_20240825.tiff")
+pal <- colorNumeric(inferno(256), values(r), na.color = "transparent")
+
+leaflet() |>
+  addProviderTiles("CartoDB.Voyager") |>
+  setView(lng = -47.82, lat = -21.18, zoom = 6) |>
+  addMarkers(lng = -47.82, lat = -21.18) |>
+  addRasterImage(r, colors = pal, opacity = 0.7)
+```
+
+:::{.cr-section}
+
+:::{focus-on="cr-rib-preto"}
+A foto ao lado foi feita em Ribeirão Preto, SP (fonte: CNN Brasil). 
+:::
+
+:::{#cr-rib-preto .scale-to-fill}
+![](img/cnn_rib_preto.webp)
+:::
+
+:::
+
+# Referências
+
+INPE. [Programa Queimadas](https://terrabrasilis.dpi.inpe.br/queimadas/portal/).
+
+NOAA. [GOES Image Viewer](https://www.star.nesdis.noaa.gov/goes/index.php)
+
+CNN Brasil. [Incêndio de grandes proporções atinge canavial e nuvem de fumaça  "engole" Ribeirão Preto (SP)](https://www.cnnbrasil.com.br/nacional/incendio-de-grandes-proporcoes-atinge-canavial-e-nuvem-de-fumaca-engole-ribeirao-preto-sp/)
