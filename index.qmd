@@ -16,6 +16,7 @@ format:
 library(tidyverse)
 library(sf)
 library(leaflet)
+library(leaflet.extras)
 library(terra)
 library(viridisLite)
 library(htmlwidgets)
@@ -68,7 +69,8 @@ leaflet() |>
   setView(lng = -55, lat = -10, zoom = 3) |>
   addRasterImage(r, colors = pal, opacity = 0.7) |>
     addLegend(pal = pal, values = values(r),
-    title = "Dias sem chuva", position = "bottomright")
+    title = "Dias sem chuva", position = "bottomright") |>
+  suspendScroll(sleepNote = FALSE)
 ```
 
 <br> 
@@ -112,7 +114,8 @@ queimadas |>
     color = "red",
     stroke = FALSE,
     fillOpacity = 0.5
-  )
+  ) |>
+  suspendScroll(sleepNote = FALSE)
 
 queimadas |>
   filter(date(data_hora_gmt) == as.Date("2024-08-26")) |>
@@ -123,7 +126,8 @@ queimadas |>
     color = "red",
     stroke = FALSE,
     fillOpacity = 0.5
-  )
+  ) |>
+  suspendScroll(sleepNote = FALSE)
 ```
 
 
@@ -147,7 +151,8 @@ queimadas |>
     color = "red",
     stroke = FALSE,
     fillOpacity = 0.5
-  )
+  ) |>
+  suspendScroll(sleepNote = FALSE)
 ```
 
 <br>
@@ -174,7 +179,8 @@ queimadas |>
     color = "red",
     stroke = FALSE,
     fillOpacity = 0.5
-  )
+  ) |>
+  suspendScroll(sleepNote = FALSE)
 ```
 
 # Fumaça na atmosfera
@@ -196,17 +202,20 @@ pal_3 <- colorNumeric(inferno(256), values(r_3), na.color = "transparent")
 leaflet() |>
   addProviderTiles("CartoDB.Voyager") |>
   setView(lng = -55, lat = -10, zoom = 4) |>
-  addRasterImage(r_1, colors = pal_1, opacity = 0.7)
+  addRasterImage(r_1, colors = pal_1, opacity = 0.7) |>
+  suspendScroll(sleepNote = FALSE)
 
 leaflet() |>
   addProviderTiles("CartoDB.Voyager") |>
   setView(lng = -55, lat = -10, zoom = 4) |>
-  addRasterImage(r_2, colors = pal_2, opacity = 0.7)
+  addRasterImage(r_2, colors = pal_2, opacity = 0.7) |>
+  suspendScroll(sleepNote = FALSE)
 
 leaflet() |>
   addProviderTiles("CartoDB.Voyager") |>
   setView(lng = -55, lat = -10, zoom = 4) |>
-  addRasterImage(r_3, colors = pal_3, opacity = 0.7)
+  addRasterImage(r_3, colors = pal_3, opacity = 0.7) |>
+  suspendScroll(sleepNote = FALSE)
 ```
 
 Ribeirão Preto (SP) foi uma das cidades afetadas, conforme pode ser observado abaixo nos dados de 25 de agosto de 2024.
@@ -221,7 +230,8 @@ leaflet() |>
   addProviderTiles("CartoDB.Voyager") |>
   setView(lng = -47.82, lat = -21.18, zoom = 6) |>
   addMarkers(lng = -47.82, lat = -21.18) |>
-  addRasterImage(r, colors = pal, opacity = 0.7)
+  addRasterImage(r, colors = pal, opacity = 0.7) |>
+  suspendScroll(sleepNote = FALSE)
 ```
 
 
