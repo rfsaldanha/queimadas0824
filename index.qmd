@@ -4,7 +4,7 @@ format:
   closeread-html:
     remove-header-space: true
     debug-mode: false
-    embed-resources: true
+    embed-resources: false
 ---
 
 ```{r}
@@ -76,7 +76,7 @@ Pode-se observar grandes porções do território brasileiro com mais de 60 dias
 
 # Evolução dos focos de queimadas
 
-Deste o dia 1o de agosto de 2024, os países da América do Sul e o Brasil tem apresentado uma quantidade crescente de focos de queimada, conforme dados levantados pelo Inpe. O gráfico abaixo apresenta a quantidade de focos detectadas através do satélite AQUA-Tarde, usado pelo Inpe como referêcia para este tipo de detecçào.
+Deste o dia 1o de agosto de 2024, os países da América do Sul e o Brasil tem apresentado uma quantidade crescente de focos de queimada, conforme dados levantados pelo Inpe. Os gráficos abaixo apresentam a quantidade de focos detectadas através do satélite [AQUA](https://aqua.nasa.gov/), usado pelo Inpe como referêcia para este tipo de detecção.
 
 
 ```{r}
@@ -85,20 +85,18 @@ queimadas |>
   ggplot(aes(x = date, fill = pais)) +
   geom_bar() +
   theme_minimal() +
-  labs(x = "Data", y = "Focos de queimada", fill = "País")
-```
+  labs(x = "Data", y = "Focos de queimada", fill = "País", title = "Focos de queimada na América do Sul")
 
-O gráfico abaixo apresenta a quantidade de focos de queimadas no Brasil por bioma afetado. Pode-se notar que o bioma amazônico é o mais afetado em todos os dias de agosto de 2024.
-
-```{r}
 queimadas |>
   filter(pais == "Brasil") |>
   mutate(date = as_date(data_hora_gmt)) |>
   ggplot(aes(x = date, fill = bioma)) +
   geom_bar() +
   theme_minimal() +
-  labs(x = "Data", y = "Focos de queimada", fill = "Bioma")
+  labs(x = "Data", y = "Focos de queimada", fill = "Bioma", title = "Focos de queimada nos biomas brasileiros")
 ```
+
+Pode-se notar que o bioma amazônico é o mais afetado em todos os dias de agosto de 2024.
 
 Os mapas abaixo apresentam focos de queimada detectados em dois momentos. O mapa da esquerda apresenta os focos no dia 1o de agosto. O mapa da direita apresenta os focos no dia 26 de agosto de 2024.
 
@@ -127,6 +125,7 @@ queimadas |>
     fillOpacity = 0.5
   )
 ```
+
 
 
 Pode-se observar, comparando os dois mapas, o crescimento de focos de queimada no Brasil -- principalmente na região Norte -- e no Paraguai, Argentina e norte da Bolívia.
@@ -225,23 +224,51 @@ leaflet() |>
   addRasterImage(r, colors = pal, opacity = 0.7)
 ```
 
+
 :::{.cr-section}
 
 :::{focus-on="cr-rib-preto"}
-A foto ao lado foi feita em Ribeirão Preto, SP ([CNN Brasil](https://www.cnnbrasil.com.br/nacional/incendio-de-grandes-proporcoes-atinge-canavial-e-nuvem-de-fumaca-engole-ribeirao-preto-sp/)) e mostra a grande extensão que uma nuvem de fumaça proveniente de queimadas pode tomar sob um núcleo urbano. 
-:::
-
-:::{focus-on="cr-rib-preto"}
-A grande quantidade de **gás carbônico** e de **material particulado** nestas nuvens de fumaça pode apresentar graves consequências para a saúde humana, agravando condições de **doenças respiratórias** e **cardiovasculares**, podendo acarretar um aumento na busca por **atendimento ambulatorial** e no número de **internações hospitalares**.
+A foto ao lado foi feita em Ribeirão Preto, SP no dia 23 de agosto de 2024 e mostra a grande extensão que uma nuvem de fumaça proveniente de queimadas pode tomar sob uma cidade.
+<br><br>
+Fonte da imagem: [CNN Brasil](https://www.cnnbrasil.com.br/nacional/incendio-de-grandes-proporcoes-atinge-canavial-e-nuvem-de-fumaca-engole-ribeirao-preto-sp/)
 :::
 
 :::{#cr-rib-preto .scale-to-fill}
 ![](img/cnn_rib_preto.webp)
 :::
 
+:::{focus-on="cr-aldeia"}
+A fumaça das queimadas também atingem áreas rurais e terras indígenas.
+<br><br>
+Aldeia na Terra Indígena Xingu. Foto de Takumã Kuikuro/2020. Fonte: [Amazonia Real](https://amazoniareal.com.br/amazonia-em-chamas-20-xingu-e-o-territorio-indigena-com-mais-focos-de-queimadas-no-brasil-18-09-2020/).
+:::
+
+:::{#cr-aldeia .scale-to-fill}
+![](img/aldeia.jpeg)
+:::
+
+:::{focus-on="cr-yanomami"}
+A grande quantidade de **gás carbônico** e de **material particulado** nestas nuvens de fumaça pode apresentar graves consequências para a saúde humana, agravando condições de **doenças respiratórias** e **cardiovasculares**, podendo acarretar um aumento na busca por **atendimento ambulatorial** e no número de **internações hospitalares**.
+<br><br>
+Saiba mais sob os efeitos das queimadas na saúde humana [clicando aqui](https://climaesaude.icict.fiocruz.br/ar).
+<br><br>
+Criança da TI Yanomami em Roraima, recebe nebulização por conta dos efeitos da fumaça. Foto feita em 2016 - Prevfogo/Ibama/MMA/ISA. Fonte: [Brasil de Fato](https://www.brasildefato.com.br/2020/09/08/queimadas-aumentam-em-25-as-internacoes-por-problemas-respiratorios-na-amazonia)
+:::
+
+:::{#cr-yanomami .scale-to-fill}
+![](img/yanomami_2016.jpeg)\
 :::
 
 
+:::
+
+# Observatório de Clima e Saúde (ICICT/Fiocruz)
+
+O [Observatório de Clima e Saúde](https://climaesaude.icict.fiocruz.br/) da Fiocruz tem mais de 15 anos de experiência na condução de pesquisas científicas sobre os efeitos do clima sob a saúde humana, divulgando dados e conhecimento para o fortalecimento do Sistema Único de Saúde.
+
+::: {.column-margin}
+![](img/selo_obs.png){width="100%"}
+:::
 
 
 # Referências
