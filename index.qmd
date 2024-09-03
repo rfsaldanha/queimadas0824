@@ -40,7 +40,7 @@ queimadas <- st_read("data/queimadas.gpkg", quiet = TRUE) |>
 
 # Queimadas
 
-Em Outubro de 2024, um grande número de focos de queimadas surgiu no Brasil e em outros países da América do Sul, criando grandes nuvens de fumaça na atmosfera, o que poderá ter potenciais impactos na saúde da população.
+Em agosto de 2024, um grande número de focos de queimadas surgiu no Brasil e em outros países da América do Sul, criando grandes nuvens de fumaça na atmosfera, o que poderá ter potenciais impactos na saúde da população.
 :::
 
 :::{focus-on="cr-goes"}
