@@ -4,7 +4,7 @@ format:
   closeread-html:
     remove-header-space: true
     debug-mode: false
-    embed-resources: false
+    embed-resources: true
 ---
 
 ```{r}
